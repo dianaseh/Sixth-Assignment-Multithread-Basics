@@ -1,4 +1,4 @@
-package sbu.cs;
+package java.sbu.cs;
 
 /*
     In this exercise, you must analyse the following code and use interrupts
@@ -31,12 +31,13 @@ public class UseInterrupts
         public void run() {
             System.out.println(this.getName() + " is Active.");
 
-            while (this.sleepCounter > 0)
+            while (this.sleepCounter > 0 )
             {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-
+                    System.out.println("{"+this.getName()+"} has been interrupted");
+                    return;
                 }
                 finally {
                     this.sleepCounter--;
@@ -66,11 +67,15 @@ public class UseInterrupts
         public void run() {
             System.out.println(this.getName() + " is Active.");
 
-            for (int i = 0; i < 10; i += 3)
+            for (int i = 0; i < 10 && Thread.currentThread().isInterrupted() ; i += 3)
             {
                 i -= this.value;
-
+                if(Thread.interrupted()){
+                    System.out.println("{"+this.getName()+"} has been interrupted");
+                    this.interrupt();
+                }
             }
+
         }
     }
 
@@ -78,16 +83,24 @@ public class UseInterrupts
     You can add new code to the main function. This is where you must utilize interrupts.
     No existing line of code should be changed or deleted.
  */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         SleepThread sleepThread = new SleepThread(5);
         sleepThread.start();
 
         // TODO  Check if this thread runs for longer than 3 seconds (if it does, interrupt it)
+        Thread.sleep(3000);
+        if (sleepThread.isAlive()) {
+            sleepThread.interrupt();
+        }
 
         LoopThread loopThread = new LoopThread(3);
         loopThread.start();
 
         // TODO  Check if this thread runs for longer than 3 seconds (if it does, interrupt it)
+        Thread.sleep(3000);
+        if (loopThread.isAlive()) {
+            loopThread.interrupt();
+        }
 
     }
 }

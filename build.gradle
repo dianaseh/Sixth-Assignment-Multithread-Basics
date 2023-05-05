@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'sbu.cs'
+group 'java.sbu.cs'
 version '1.0-SNAPSHOT'
 
 repositories {
